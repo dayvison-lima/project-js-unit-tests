@@ -41,26 +41,35 @@
 // 4: Crie uma função `createMenu()` que, recebendo um objeto como parâmetro, retorna esse objeto no seguinte formato: 
 //  { fetchMenu: () => objetoPassadoPorParametro }.
 
-const createMenu = () => {};
+const createMenu = (menu) => {
+  const obj = {
+    fetchMenu: () => menu,
+    consumption: [],
+    order: (item) => {
+      const foodPrice = menu.food && menu.food[item];
+      const drinkPrice = menu.drinks && menu.drinks[item];
 
-// Faça o item 5 no arquivo tests/restaurant.spec.js
+      if (foodPrice || drinkPrice) {
+        obj.consumption.push(item);
+      } else {
+        console.log('Item indisponível');
+      }
+    },
+    pay: () => {
+      let total = 0;
 
-// 6: Adicione ao objeto retornado por `createMenu()` uma chave de nome `consumption` que, como valor inicial, tem um array vazio.
+      obj.consumption.forEach((item) => {
+        const foodPrice = menu.food && menu.food[item];
+        const drinkPrice = menu.drinks && menu.drinks[item];
 
-// Faça o item 7 no arquivo tests/restaurant.spec.js
+        total += foodPrice || drinkPrice || 0;
+      });
 
-// 8: Crie uma função, associada à chave 'order', que, ao receber uma string como parâmetro, adiciona essa string ao array da chave 'consumption'.
-// - se a string existir nas chaves 'food' ou 'drink', deve ser adicionada ao array consumption
-// - senão, deve exibir a mensagem "Item indisponível" e não adicionar nada ao array
-// Ex: obj.order('coxinha') --> ['coxinha']
-// Ex: obj.order('picanha') --> Exibe "Item indisponível"
+      return total * 1.1; // Acrescenta 10%
+    },
+  };
 
-// Faça os ítens de 9 a 11 no arquivo tests/restaurant.spec.js
-
-// 12: Adicione ao objeto retornado por `createMenu()` uma chave `pay` armazenando uma função que:
-// - percorrerá item a item de `objetoRetornado.consumption`;
-// - fará a soma do preço desses itens;
-// - retornará o valor somado acrescido de 10%.
-// DICA: para isso, você precisará percorrer tanto o objeto da chave `food` quanto o objeto da chave `drink`.
+  return obj;
+};
 
 module.exports = createMenu;
